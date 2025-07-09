@@ -2,127 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./FileListComponent.module.css";
 import * as XLSX from "xlsx";
 
-const FileListComponent = ({
-  setTotalFilesSentToday,
-  setTotalFilesSentMonth,
-  setTotalFilesSentOverall,
-  setOfficerPerformanceData,
-}) => {
-  const [files, setFiles] = useState([]);
-  const [loading, setLoading] = useState(true);
+const FileListComponent = ({ files }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      const token = localStorage.getItem("token");
-
-      try {
-        const response = await fetch(
-          "https://bot.kediritechnopark.com/webhook/files",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const text = await response.text();
-
-        if (!text) {
-          throw new Error("Server membalas kosong.");
-        }
-
-        const data = JSON.parse(text);
-
-        if (!data.success || !Array.isArray(data.data)) {
-          throw new Error("Format respons tidak valid.");
-        }
-
-        const fileData = data.data;
-
-        // 1. Set ke state
-        setFiles(fileData);
-
-        // 2. Hitung total file hari ini
-        const today = new Date().toISOString().slice(0, 10);
-        const totalToday = fileData.filter((f) =>
-          f.created_at.startsWith(today)
-        ).length;
-        setTotalFilesSentToday(totalToday);
-
-        // 3. Hitung total bulan ini
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-        const totalThisMonth = fileData.filter((f) => {
-          const d = new Date(f.created_at);
-          return (
-            d.getMonth() === currentMonth && d.getFullYear() === currentYear
-          );
-        }).length;
-        setTotalFilesSentMonth(totalThisMonth);
-
-        // 4. Total keseluruhan
-        setTotalFilesSentOverall(fileData.length);
-
-        // 5. Grafik performa per bulan (dinamis)
-        const dateObjects = fileData.map((item) => new Date(item.created_at));
-        if (dateObjects.length > 0) {
-          const minDate = new Date(Math.min(...dateObjects));
-          const maxDate = new Date(Math.max(...dateObjects));
-
-          const monthlyDataMap = {};
-          let current = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
-          const end = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
-
-          while (current <= end) {
-            const monthKey = `${current.getFullYear()}-${String(
-              current.getMonth() + 1
-            ).padStart(2, "0")}`;
-            monthlyDataMap[monthKey] = 0;
-            current.setMonth(current.getMonth() + 1);
-          }
-
-          fileData.forEach((item) => {
-            const d = new Date(item.created_at);
-            const monthKey = `${d.getFullYear()}-${String(
-              d.getMonth() + 1
-            ).padStart(2, "0")}`;
-            if (monthlyDataMap[monthKey] !== undefined) {
-              monthlyDataMap[monthKey]++;
-            }
-          });
-
-          const performanceArray = Object.entries(monthlyDataMap).map(
-            ([month, count]) => {
-              const [year, monthNum] = month.split("-");
-              const dateObj = new Date(`${month}-01`);
-              const label = new Intl.DateTimeFormat("id-ID", {
-                month: "long",
-                year: "numeric",
-              }).format(dateObj); // hasil: "Juli 2025"
-              return { month: label, count };
-            }
-          );
-
-          setOfficerPerformanceData(performanceArray);
-        }
-      } catch (error) {
-        console.error("Gagal mengambil data dari server:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFiles();
-  }, []);
 
   const formatPhoneNumber = (phone) =>
     phone?.replace(/(\d{4})(\d{4})(\d{4})/, "$1-$2-$3");
@@ -243,7 +125,7 @@ const FileListComponent = ({
     XLSX.writeFile(workbook, "data-export.xlsx");
   };
 
-  if (loading) {
+  if (!files) {
     return (
       <div className={styles.fileListSection}>
         <div className={styles.emptyState}>
@@ -279,7 +161,7 @@ const FileListComponent = ({
       )}
 
       <div className={styles.tableContainer}>
-        {files.length === 0 ? (
+        {files && files.length === 0 ? (
           <div className={styles.emptyState}>
             <div className={styles.emptyStateTitle}>Belum ada data</div>
             <p className={styles.emptyStateText}>

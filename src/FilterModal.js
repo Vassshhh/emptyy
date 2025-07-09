@@ -21,6 +21,8 @@ const FilterModal = ({
   const [listKelurahan, setListKelurahan] = useState([]);
   const [listRw, setListRw] = useState([]);
   const [listRt, setListRt] = useState([]);
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
 
   const fetchOptions = async (body, field) => {
     try {
@@ -48,6 +50,8 @@ const FilterModal = ({
       setKelurahan("");
       setRw("");
       setRt("");
+      setDateStart("");
+      setDateEnd("");
       setListKecamatan([]);
       setListKelurahan([]);
       setListRw([]);
@@ -123,7 +127,15 @@ const FilterModal = ({
   };
 
   const handleApply = () => {
-    onApply({ kota, kecamatan, kelurahan, rw, rt });
+    onApply({
+      kota,
+      kecamatan,
+      kelurahan,
+      rw,
+      rt,
+      dateStart,
+      dateEnd,
+    });
     onClose();
   };
 
@@ -207,6 +219,26 @@ const FilterModal = ({
               </option>
             ))}
         </select>
+
+        <div className={styles.dateGroup}>
+          <label className={styles.label}>Tanggal Mulai</label>
+          <input
+            type="date"
+            className={styles.dateInput}
+            value={dateStart}
+            onChange={(e) => setDateStart(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.dateGroup}>
+          <label className={styles.label}>Tanggal Sampai</label>
+          <input
+            type="date"
+            className={styles.dateInput}
+            value={dateEnd}
+            onChange={(e) => setDateEnd(e.target.value)}
+          />
+        </div>
 
         <div className={styles.actions}>
           <button

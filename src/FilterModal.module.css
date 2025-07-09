@@ -52,3 +52,22 @@
 .apply {
   background-color: #3b82f6; /* blue */
 }
+
+.label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+  color: var(--dark-blue);
+}
+
+.dateInput {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.dateGroup {
+  margin-top: 8px;
+}

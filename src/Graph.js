@@ -22,24 +22,66 @@ const Graph = () => {
   const [rw, setRw] = useState("");
   const [rt, setRt] = useState("");
 
+  const [files, setFiles] = useState([]);
+
   const [totalFilesSentToday, setTotalFilesSentToday] = useState(0);
   const [totalFilesSentMonth, setTotalFilesSentMonth] = useState(0);
   const [totalFilesSentOverall, setTotalFilesSentOverall] = useState(0);
   const [officerPerformanceData, setOfficerPerformanceData] = useState([]);
 
-  const fetchFilteredData = async (body, field) => {
+  const fetchFilteredData = async (e) => {
     try {
       const res = await fetch(
         "https://bot.kediritechnopark.com/webhook/psi/filteredData",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+          body: JSON.stringify({
+            kota_pembuatan: e.kota,
+            kecamatan: e.kecamatan,
+            kelurahan: e.kelurahan,
+            rw: e.rw,
+            rt: e.rt,
+            start_date: e.dateStart,
+            end_date: e.dateEnd,
+          }),
         }
       );
       const data = await res.json();
 
       console.log(data);
+      const formattedData = data[0].result.grafik.map((item) => ({
+        label: item.label,
+        count: item.total,
+      }));
+
+      setOfficerPerformanceData(formattedData);
+
+      const fileData = data[0].result.data;
+
+      // 1. Set ke state
+      setFiles(fileData);
+
+      // 2. Hitung total file hari ini
+      const today = new Date().toISOString().slice(0, 10);
+      const totalToday = fileData.filter((f) =>
+        f.created_at.startsWith(today)
+      ).length;
+      setTotalFilesSentToday(totalToday);
+
+      // 3. Hitung total bulan ini
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+      const totalThisMonth = fileData.filter((f) => {
+        const d = new Date(f.created_at);
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      }).length;
+      setTotalFilesSentMonth(totalThisMonth);
+
+      // 4. Total keseluruhan
+      setTotalFilesSentOverall(fileData.length);
+
       return data;
     } catch (err) {
       console.error("Fetch error:", err);
@@ -72,7 +114,9 @@ const Graph = () => {
         <FilterModal
           isOpen={isFilterOpen}
           onClose={() => setIsFilterOpen(false)}
-          onApply={() => {}}
+          onApply={(e) => {
+            fetchFilteredData(e);
+          }}
           kota={kota}
           kecamatan={kecamatan}
           kelurahan={kelurahan}
@@ -98,7 +142,7 @@ const Graph = () => {
                 tick={{ fontSize: 12 }}
               />
               <YAxis
-                dataKey="month"
+                dataKey="label"
                 type="category"
                 tick={{ fontSize: 12 }}
                 width={100}
@@ -113,12 +157,7 @@ const Graph = () => {
           </div>
         )}
       </div>
-      <FileListComponent
-        setTotalFilesSentToday={setTotalFilesSentToday}
-        setTotalFilesSentMonth={setTotalFilesSentMonth}
-        setTotalFilesSentOverall={setTotalFilesSentOverall}
-        setOfficerPerformanceData={setOfficerPerformanceData}
-      />
+      <FileListComponent files={files} />
     </div>
   );
 };
