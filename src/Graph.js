@@ -114,7 +114,13 @@ const Graph = () => {
 
       <div className={styles.chartSection}>
         <h2>Grafik Pertumbuhan Anggota</h2>
-        <button onClick={() => setIsFilterOpen(true)}></button>
+        <button
+          className={styles.filterButton}
+          onClick={() => setIsFilterOpen(true)}
+        >
+          <span className={styles.filterIcon}>🔍</span>
+          Filter Data
+        </button>
         <FilterModal
           isOpen={isFilterOpen}
           onClose={() => setIsFilterOpen(false)}

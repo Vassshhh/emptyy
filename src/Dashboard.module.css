@@ -1,4 +1,4 @@
-/* Dashboard.module.css - Cleaned Version */
+/* Dashboard.module.css - Updated Version */
 
 /* Modern Color Palette */
 :root {
@@ -356,6 +356,234 @@ body {
   font-size: 0.875rem;
 }
 
+/* --- Updated Officer List Styles --- */
+.officerListContainer {
+  background-color: var(--neutral-50);
+  border: 1px solid var(--border-light);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+/* Add Officer Form Styles */
+.addOfficerSection {
+  background-color: var(--neutral-50);
+  border: 1px solid var(--border-light);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.addOfficerSection h2 {
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.addOfficerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.addOfficerForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.addOfficerForm input[type="text"],
+.addOfficerForm input[type="password"] {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background-color: var(--white);
+  color: var(--text-primary);
+}
+
+.addOfficerForm input[type="text"]:focus,
+.addOfficerForm input[type="password"]:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+  outline: none;
+}
+
+.addOfficerForm input[type="text"]::placeholder,
+.addOfficerForm input[type="password"]::placeholder {
+  color: var(--text-secondary);
+}
+
+.addOfficerSubmitButton {
+  background-color: #ef4444;
+  color: var(--text-light);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+  letter-spacing: 0.025em;
+}
+
+.addOfficerSubmitButton:hover {
+  background-color: #d03b3b;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.addOfficerSubmitButton:active {
+  transform: translateY(0);
+}
+
+.officerList {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  border: 1px solid var(--border-light);
+}
+
+.officerItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+  min-height: 60px;
+}
+
+.officerItem:last-child {
+  border-bottom: none;
+}
+
+.officerItem:hover {
+  background-color: var(--neutral-50);
+}
+
+.officerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.officerIcon {
+  font-size: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--neutral-100);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.officerDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.officerName {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.lele {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.deleteButton {
+  background-color: rgb(239 68 68 / 0.1);
+  border: 1px solid rgb(239 68 68 / 0.2);
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  color: var(--error-red);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.deleteButton:hover {
+  background-color: rgb(239 68 68 / 0.2);
+  border-color: var(--error-red);
+  transform: translateY(-1px);
+}
+
+.deleteButton:focus {
+  outline: 2px solid var(--error-red);
+  outline-offset: 2px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--text-secondary);
+}
+
+.emptyState span {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 2rem 0;
+  width: 100%;
+}
+
+/* Custom scrollbar for officer list */
+.officerList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.officerList::-webkit-scrollbar-track {
+  background: var(--neutral-100);
+  border-radius: 3px;
+}
+
+.officerList::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: 3px;
+}
+
+.officerList::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-500);
+}
+
 /* --- Media Queries for Tablets and Desktops --- */
 
 /* Tablet-sized screens and up */
@@ -404,6 +632,55 @@ body {
   .chartPlaceholder {
     height: 25rem;
   }
+
+  .officerListContainer {
+    padding: 1.5rem;
+  }
+
+  .addOfficerSection {
+    padding: 1.5rem;
+  }
+
+  .addOfficerSection h2 {
+    font-size: 1.5rem;
+  }
+
+  .addOfficerForm {
+    gap: 1.25rem;
+  }
+
+  .addOfficerForm label {
+    font-size: 1rem;
+  }
+
+  .addOfficerForm input[type="text"],
+  .addOfficerForm input[type="password"] {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+  }
+
+  .addOfficerSubmitButton {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .officerItem {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .officerIcon {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.375rem;
+  }
+
+  .officerName {
+    font-size: 1rem;
+  }
+
+  .officerRole {
+    font-size: 0.875rem;
+  }
 }
 
 /* Desktop-sized screens and up */
@@ -438,6 +715,31 @@ body {
   .chartPlaceholder {
     height: 30rem;
   }
+
+  .officerListContainer {
+    padding: 2rem;
+  }
+
+  .addOfficerSection {
+    padding: 2rem;
+  }
+
+  .addOfficerSection h2 {
+    font-size: 1.75rem;
+  }
+
+  .addOfficerForm {
+    gap: 1.5rem;
+  }
+
+  .addOfficerSubmitButton {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+
+  .officerList {
+    max-height: 400px;
+  }
 }
 
 /* Single column layout when only one section is present */
@@ -447,163 +749,71 @@ body {
   }
 }
 
-/* CSS untuk styling daftar petugas */
-
-.officerListContainer {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.officerList {
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  border-radius: 6px;
-  background: white;
-  border: 1px solid #e9ecef;
-}
-
-.officerItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid #e9ecef;
-  transition: background-color 0.2s ease;
-}
-
-.officerItem:last-child {
-  border-bottom: none;
-}
-
-.officerItem:hover {
-  background-color: #f8f9fa;
-}
-
-.officerInfo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.officerIcon {
-  font-size: 20px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.officerDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.officerName {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 14px;
-}
-
-.officerRole {
-  font-size: 12px;
-  color: #6c757d;
-  font-style: italic;
-  text-transform: capitalize;
-}
-
-.deleteButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-  opacity: 0.7;
-}
-
-.deleteButton:hover {
-  background-color: #fee;
-  opacity: 1;
-}
-
-.deleteButton:focus {
-  outline: 2px solid #dc3545;
-  outline-offset: 2px;
-}
-
-.emptyState {
-  text-align: center;
-  padding: 40px 20px;
-  color: #6c757d;
-}
-
-.emptyState span {
-  font-size: 32px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.emptyState p {
-  margin: 0;
-  font-size: 14px;
-}
-
-.separator {
-  border: none;
-  border-top: 1px solid #dee2e6;
-  margin: 24px 0;
-}
-
-/* Custom scrollbar untuk daftar petugas */
-.officerList::-webkit-scrollbar {
-  width: 8px;
-}
-
-.officerList::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-.officerList::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-.officerList::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
+/* Responsive design for mobile */
+@media (max-width: 767px) {
   .officerItem {
-    padding: 10px 12px;
+    padding: 0.875rem 1rem;
+    min-height: 50px;
   }
 
   .officerInfo {
-    gap: 8px;
+    gap: 0.625rem;
+  }
+
+  .officerIcon {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 1.125rem;
   }
 
   .officerName {
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 
   .officerRole {
-    font-size: 11px;
+    font-size: 0.6875rem;
     text-align: left;
+  }
+
+  .deleteButton {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8125rem;
+  }
+
+  .officerListContainer {
+    padding: 0.875rem;
+  }
+
+  .addOfficerSection {
+    padding: 0.875rem;
+  }
+
+  .addOfficerForm {
+    gap: 0.875rem;
+    text-align: left;
+  }
+
+  .addOfficerForm label {
+    font-size: 0.8125rem;
+  }
+
+  .addOfficerForm input[type="text"],
+  .addOfficerForm input[type="password"] {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .addOfficerSubmitButton {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .officerList {
+    max-height: 280px;
   }
 }
 
+/* Filter and Modal Styles */
 .filterButtons {
   display: flex;
   flex-wrap: wrap;
@@ -612,17 +822,19 @@ body {
 }
 
 .filterButton {
-  background-color: #f1f5f9;
-  border: 1px solid #ccc;
+  background-color: var(--neutral-100);
+  border: 1px solid var(--border-light);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 14px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
 }
 
 .filterButton:hover {
-  background-color: #e2e8f0;
+  background-color: var(--neutral-200);
+  border-color: var(--neutral-300);
 }
 
 /* Modal Styles */
@@ -640,36 +852,50 @@ body {
 }
 
 .modalContent {
-  background-color: white;
-  padding: 20px;
-  border-radius: 16px;
-  width: 80%;
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
   max-width: 400px;
   text-align: center;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-lg);
 }
 
 .filterOptions {
   list-style: none;
   padding: 0;
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 .filterOptions li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-light);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-primary);
 }
 
 .filterOptions li:hover {
-  background-color: #f0f0f0;
+  background-color: var(--neutral-50);
+}
+
+.filterOptions li:last-child {
+  border-bottom: none;
 }
 
 .modalClose {
-  margin-top: 12px;
-  padding: 8px 16px;
-  background-color: #00adef;
-  color: white;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.modalClose:hover {
+  background-color: var(--dark-blue);
 }

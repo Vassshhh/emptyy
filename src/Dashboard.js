@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router-dom";
 import Graph from "./Graph";
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,7 +27,6 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (!token) {
         window.location.href = "/login";
-
         return;
       }
 
@@ -245,8 +245,9 @@ const Dashboard = () => {
       <div className={styles.dashboardGrid}>
         {user.role === "admin" && (
           <div className={styles.formSection}>
-            <h2>Daftar Petugas</h2>
+            {/* Daftar Petugas Section */}
             <div className={styles.officerListContainer}>
+              <h2>Daftar Petugas</h2>
               <div className={styles.officerList}>
                 {officers.length > 0 ? (
                   officers.map((officer) => (
@@ -267,7 +268,7 @@ const Dashboard = () => {
                         className={styles.deleteButton}
                         title="Hapus Petugas"
                       >
-                        ❌
+                        Hapus
                       </button>
                     </div>
                   ))
@@ -281,37 +282,44 @@ const Dashboard = () => {
             </div>
 
             <hr className={styles.separator} />
-            <h2>Tambah Petugas Baru</h2>
-            <form onSubmit={handleAddOfficer} className={styles.form}>
-              <label>
-                Username
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Masukkan username"
-                  required
-                />
-              </label>
-              <label>
-                Password
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Masukkan password"
-                  required
-                />
-              </label>
-              <button type="submit" className={styles.submitButton}>
-                Tambah Officer
-              </button>
-            </form>
 
-            {successMessage && (
-              <p className={styles.success}>{successMessage}</p>
-            )}
-            {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+            {/* Tambah Petugas Section */}
+            <div className={styles.addOfficerSection}>
+              <h2>Tambah Petugas Baru</h2>
+              <form
+                onSubmit={handleAddOfficer}
+                className={styles.addOfficerForm}
+              >
+                <label>
+                  Username
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Masukkan username"
+                    required
+                  />
+                </label>
+                <label>
+                  Password
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Masukkan password"
+                    required
+                  />
+                </label>
+                <button type="submit" className={styles.addOfficerSubmitButton}>
+                  Tambah Officer
+                </button>
+              </form>
+
+              {successMessage && (
+                <p className={styles.success}>{successMessage}</p>
+              )}
+              {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+            </div>
           </div>
         )}
       </div>
