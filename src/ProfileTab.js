@@ -7,8 +7,8 @@ const ProfileTab = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [profile, setProfile] = useState({});
-  const [profileTemp, setProfileTemp] = useState({});
+  const [user, setUser] = useState({});
+  const [userTemp, setUserTemp] = useState({});
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -27,30 +27,59 @@ const ProfileTab = () => {
   };
 
   useEffect(() => {
-    const dummyProfile = {
-      username: "admin",
+    const verifyTokenAndFetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "/login";
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "https://bot.kediritechnopark.com/webhook/dashboard/psi",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data[0].username) {
+          throw new Error("Unauthorized");
+          console.log(response);
+        }
+
+        setUser(data[0]);
+        setUserTemp(data[0]);
+      } catch (error) {
+        console.error("Token tidak valid:", error.message);
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
     };
 
-    setProfile(dummyProfile);
-    setProfileTemp(dummyProfile);
+    verifyTokenAndFetchData();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile((prev) => ({ ...prev, [name]: value }));
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
     try {
-      if (!profile.oldPassword || !profile.newPassword) {
+      if (!user.oldPassword || !user.newPassword) {
         alert("Password lama dan baru tidak boleh kosong.");
         return;
       }
 
       const payload = {
-        username: profile.username,
-        oldPassword: profile.oldPassword,
-        newPassword: profile.newPassword,
+        username: user.username,
+        oldPassword: user.oldPassword,
+        newPassword: user.newPassword,
       };
 
       const response = await fetch(
@@ -77,7 +106,7 @@ const ProfileTab = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    setProfile(profileTemp);
+    setUser(userTemp);
   };
 
   return (
@@ -168,7 +197,7 @@ const ProfileTab = () => {
                   <input
                     type="text"
                     name="username"
-                    value={profile.username}
+                    value={user.username}
                     className={`${styles.input} ${
                       !isEditing ? styles.readOnly : ""
                     }`}

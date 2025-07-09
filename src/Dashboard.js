@@ -1,29 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router-dom";
-import FileListComponent from "./FileListComponent";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-
+import Graph from "./Graph";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const menuRef = useRef(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [user, setUser] = useState({});
-  const [totalFilesSentToday, setTotalFilesSentToday] = useState(0);
-  const [totalFilesSentMonth, setTotalFilesSentMonth] = useState(0);
-  const [totalFilesSentOverall, setTotalFilesSentOverall] = useState(0);
-  const [officerPerformanceData, setOfficerPerformanceData] = useState([]);
   const [officers, setOfficers] = useState([]);
 
   useEffect(() => {
@@ -38,6 +26,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
       if (!token) {
         window.location.href = "/login";
+
         return;
       }
 
@@ -252,123 +241,80 @@ const Dashboard = () => {
           )}
         </div>
       </div>
-
-      <div className={styles.mainContent}>
-        <div className={styles.summaryCardsContainer}>
-          <div className={styles.summaryCard}>
-            <h3>Hari Ini</h3>
-            <p>{totalFilesSentToday.toLocaleString()}</p>
-          </div>
-          <div className={styles.summaryCard}>
-            <h3>Bulan Ini</h3>
-            <p>{totalFilesSentMonth.toLocaleString()}</p>
-          </div>
-          <div className={styles.summaryCard}>
-            <h3>Total Keseluruhan</h3>
-            <p>{totalFilesSentOverall.toLocaleString()}</p>
-          </div>
-        </div>
-
-        <div className={styles.dashboardGrid}>
-          {user.role === "admin" && (
-            <div className={styles.formSection}>
-              <h2>Daftar Petugas</h2>
-              <div className={styles.officerListContainer}>
-                <div className={styles.officerList}>
-                  {officers.length > 0 ? (
-                    officers.map((officer) => (
-                      <div key={officer.id} className={styles.officerItem}>
-                        <div className={styles.officerInfo}>
-                          <span className={styles.officerIcon}>👤</span>
-                          <div className={styles.officerDetails}>
-                            <strong className={styles.officerName}>
-                              {officer.username}
-                            </strong>
-                            <span className={styles.officerRole}>
-                              {officer.role}
-                            </span>
-                          </div>
+      <Graph />
+      <div className={styles.dashboardGrid}>
+        {user.role === "admin" && (
+          <div className={styles.formSection}>
+            <h2>Daftar Petugas</h2>
+            <div className={styles.officerListContainer}>
+              <div className={styles.officerList}>
+                {officers.length > 0 ? (
+                  officers.map((officer) => (
+                    <div key={officer.id} className={styles.officerItem}>
+                      <div className={styles.officerInfo}>
+                        <span className={styles.officerIcon}>👤</span>
+                        <div className={styles.officerDetails}>
+                          <strong className={styles.officerName}>
+                            {officer.username}
+                          </strong>
+                          <span className={styles.officerRole}>
+                            {officer.role}
+                          </span>
                         </div>
-                        <button
-                          onClick={() => handleDeleteOfficer(officer.id)}
-                          className={styles.deleteButton}
-                          title="Hapus Petugas"
-                        >
-                          ❌
-                        </button>
                       </div>
-                    ))
-                  ) : (
-                    <div className={styles.emptyState}>
-                      <span>📋</span>
-                      <p>Belum ada petugas terdaftar</p>
+                      <button
+                        onClick={() => handleDeleteOfficer(officer.id)}
+                        className={styles.deleteButton}
+                        title="Hapus Petugas"
+                      >
+                        ❌
+                      </button>
                     </div>
-                  )}
-                </div>
+                  ))
+                ) : (
+                  <div className={styles.emptyState}>
+                    <span>📋</span>
+                    <p>Belum ada petugas terdaftar</p>
+                  </div>
+                )}
               </div>
-
-              <hr className={styles.separator} />
-              <h2>Tambah Petugas Baru</h2>
-              <form onSubmit={handleAddOfficer} className={styles.form}>
-                <label>
-                  Username
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Masukkan username"
-                    required
-                  />
-                </label>
-                <label>
-                  Password
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Masukkan password"
-                    required
-                  />
-                </label>
-                <button type="submit" className={styles.submitButton}>
-                  Tambah Officer
-                </button>
-              </form>
-
-              {successMessage && (
-                <p className={styles.success}>{successMessage}</p>
-              )}
-              {errorMessage && <p className={styles.error}>{errorMessage}</p>}
             </div>
-          )}
 
-          <div className={styles.chartSection}>
-            <h2>Grafik Pertumbuhan Anggota</h2>
-            {officerPerformanceData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={officerPerformanceData}>
-                  <XAxis dataKey="month" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#00adef" />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className={styles.warning}>
-                📋 Belum ada data performa untuk ditampilkan
-              </div>
+            <hr className={styles.separator} />
+            <h2>Tambah Petugas Baru</h2>
+            <form onSubmit={handleAddOfficer} className={styles.form}>
+              <label>
+                Username
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Masukkan username"
+                  required
+                />
+              </label>
+              <label>
+                Password
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Masukkan password"
+                  required
+                />
+              </label>
+              <button type="submit" className={styles.submitButton}>
+                Tambah Officer
+              </button>
+            </form>
+
+            {successMessage && (
+              <p className={styles.success}>{successMessage}</p>
             )}
+            {errorMessage && <p className={styles.error}>{errorMessage}</p>}
           </div>
-        </div>
-
-        <FileListComponent
-          setTotalFilesSentToday={setTotalFilesSentToday}
-          setTotalFilesSentMonth={setTotalFilesSentMonth}
-          setTotalFilesSentOverall={setTotalFilesSentOverall}
-          setOfficerPerformanceData={setOfficerPerformanceData}
-        />
+        )}
       </div>
-
       <div className={styles.footer}>
         © 2025 Kediri Technopark • Dashboard PSI
       </div>
