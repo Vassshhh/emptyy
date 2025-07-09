@@ -26,6 +26,8 @@ const CameraCanvas = () => {
   const [loading, setLoading] = useState(false);
 
   const [KTPdetected, setKTPdetected] = useState(false);
+  const [isScanned, setIsScanned] = useState(false); // New state to track if scan is completed
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // New state for success message
 
   const fileInputRef = useRef(null);
 
@@ -277,13 +279,16 @@ const CameraCanvas = () => {
       if (data.responseCode == 409) {
         console.log(409);
         setFileTemp({ error: 409 });
+        setIsScanned(true); // Set scanned to true even for error case
         return;
       }
       console.log(data);
 
       setFileTemp(data);
+      setIsScanned(true); // Hide the review buttons after successful scan
     } catch (error) {
       console.error("Failed to read image:", error);
+      setIsScanned(true); // Hide buttons even on error
     }
   };
 
@@ -311,8 +316,18 @@ const CameraCanvas = () => {
 
       setLoading(false);
       setFileTemp(null);
+      setShowSuccessMessage(true); // Show success message
+
+      // Hide success message after 3 seconds and reset states
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setIsFreeze(false);
+        setIsScanned(false);
+        setCapturedImage(null);
+      }, 3000);
     } catch (err) {
       console.error("Gagal menyimpan ke server:", err);
+      setLoading(false);
     }
   };
 
@@ -491,6 +506,14 @@ const CameraCanvas = () => {
     reader.readAsDataURL(file);
   };
 
+  const handleHapus = () => {
+    setFileTemp(null);
+    setIsFreeze(false);
+    setIsScanned(false);
+    setCapturedImage(null);
+    setShowSuccessMessage(false);
+  };
+
   return (
     <div>
       <div className={styless.dashboardHeader}>
@@ -566,39 +589,56 @@ const CameraCanvas = () => {
           padding: "20px",
         }}
       >
-        {!isFreeze ? (
+        {showSuccessMessage ? (
+          <div
+            style={{
+              padding: "20px",
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: "#22c55e",
+              textAlign: "center",
+            }}
+          >
+            Data berhasil disimpan
+          </div>
+        ) : !isFreeze ? (
           <>
             <div
-              style={{
-                padding: 10,
-                backgroundColor: "#ef4444",
-                borderRadius: 15,
-                color: "white",
-                fontWeight: "bold",
-              }}
-              onClick={shootImage}
+              style={{ display: "flex", justifyContent: "center", gap: "50px" }}
             >
-              Ambil Gambar
-            </div>
-            <div style={{ fontWeight: "bold", margin: 10 }}>atau</div>
-            <div
-              style={{
-                padding: 10,
-                backgroundColor: "#ef4444",
-                borderRadius: 15,
-                color: "white",
-                fontWeight: "bold",
-              }}
-              onClick={triggerFileSelect}
-            >
-              Upload Gambar
+              <div
+                style={{
+                  padding: 10,
+                  backgroundColor: "#ef4444",
+                  borderRadius: 15,
+                  color: "white",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={shootImage}
+              >
+                Ambil Gambar
+              </div>
+              <div
+                style={{
+                  padding: 10,
+                  backgroundColor: "#ef4444",
+                  borderRadius: 15,
+                  color: "white",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={triggerFileSelect}
+              >
+                Upload Gambar
+              </div>
             </div>
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*"
               onChange={(e) => handleManualUpload(e)}
-              style={{ marginRight: 10, display: "none" }}
+              style={{ display: "none" }}
             />
           </>
         ) : loading ? (
@@ -608,7 +648,8 @@ const CameraCanvas = () => {
           </div>
         ) : (
           capturedImage &&
-          (!fileTemp || fileTemp.error == undefined) && (
+          (!fileTemp || fileTemp.error == undefined) &&
+          !isScanned && ( // Hide when isScanned is true
             <div>
               <h4 style={{ marginTop: 0 }}>Tinjau Gambar</h4>
               <div
@@ -618,18 +659,15 @@ const CameraCanvas = () => {
                   borderRadius: 15,
                   color: "white",
                   fontWeight: "bold",
+                  cursor: "pointer",
+                  marginBottom: "10px",
                 }}
                 onClick={() => ReadImage(capturedImage)}
               >
                 Scan
               </div>
 
-              <h4
-                onClick={() => {
-                  setFileTemp(null);
-                  setIsFreeze(false);
-                }}
-              >
+              <h4 style={{ cursor: "pointer" }} onClick={handleHapus}>
                 Hapus
               </h4>
             </div>
@@ -644,12 +682,7 @@ const CameraCanvas = () => {
           fileTemp && (
             <>
               <h4>KTP Sudah Terdaftar</h4>
-              <h4
-                onClick={() => {
-                  setFileTemp(null);
-                  setIsFreeze(false);
-                }}
-              >
+              <h4 style={{ cursor: "pointer" }} onClick={handleHapus}>
                 Hapus
               </h4>
             </>

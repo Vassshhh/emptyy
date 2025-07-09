@@ -89,6 +89,10 @@ const Graph = () => {
     }
   };
 
+  useEffect(() => {
+    fetchFilteredData({ kota: "" });
+  }, []);
+
   return (
     <div>
       <div className={styles.mainContent}>
@@ -134,7 +138,7 @@ const Graph = () => {
             <BarChart
               layout="vertical"
               data={officerPerformanceData}
-              margin={{ top: 5, right: 20, left: -30, bottom: 5 }}
+              margin={{ top: 5, right: 20, left: -20, bottom: 5 }}
             >
               <XAxis
                 type="number"

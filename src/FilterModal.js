@@ -45,18 +45,6 @@ const FilterModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      setKota("");
-      setKecamatan("");
-      setKelurahan("");
-      setRw("");
-      setRt("");
-      setDateStart("");
-      setDateEnd("");
-      setListKecamatan([]);
-      setListKelurahan([]);
-      setListRw([]);
-      setListRt([]);
-
       fetchOptions(
         { kota_pembuatan: "", kecamatan: "", kel_desa: "", rw: "", rt: "" },
         "kota_pembuatan"

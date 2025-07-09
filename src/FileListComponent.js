@@ -139,17 +139,19 @@ const FileListComponent = ({ files }) => {
   return (
     <div className={styles.fileListSection}>
       <div className={styles.fileListHeader}>
-        <h2 className={styles.fileListTitle}>📁 Daftar Anggota</h2>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <h2 className={styles.fileListTitle}>📁 Daftar Anggota</h2>
+
+          <span className={styles.fileCount}>{files.length} anggota</span>
+
           <button
             onClick={() => {
               exportToExcel(files);
             }}
             className={styles.downloadButton}
           >
-            ⬇️ Unduh Excel
+            ⬇️ Unduh
           </button>
-          <span className={styles.fileCount}>{files.length} anggota</span>
         </div>
       </div>
 

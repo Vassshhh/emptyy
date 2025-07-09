@@ -482,17 +482,17 @@
 }
 
 .downloadButton {
-  background-color: #00adef;
+  background-color: #10b981;
   color: white;
   border: none;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 1rem;
   cursor: pointer;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   transition: background-color 0.3s ease;
 }
 
 .downloadButton:hover {
-  background-color: #008fc4;
+  background-color: #13a675;
 }
