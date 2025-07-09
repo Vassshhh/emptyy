@@ -489,16 +489,15 @@ body {
 
 @media (max-width: 767px) {
   .dashboardHeader {
-    padding: 1rem;
   }
 
   .logoAndTitle img {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   .dashboardHeader .h1 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 
   .mainContent {

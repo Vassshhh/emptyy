@@ -34,6 +34,18 @@ const CameraCanvas = () => {
   const triggerFileSelect = () => {
     fileInputRef.current?.click();
   };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const loadImageToCanvas = (src, width, height) => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -48,26 +60,6 @@ const CameraCanvas = () => {
       };
     });
   };
-
-  // const isImageSimilar = (canvasA, canvasB) => {
-  //   const ctxA = canvasA.getContext("2d");
-  //   const ctxB = canvasB.getContext("2d");
-
-  //   const imgA = ctxA.getImageData(0, 0, canvasA.width, canvasA.height);
-  //   const imgB = ctxB.getImageData(0, 0, canvasB.width, canvasB.height);
-
-  //   const diffPixels = pixelmatch(
-  //     imgA.data,
-  //     imgB.data,
-  //     null,
-  //     canvasA.width,
-  //     canvasA.height,
-  //     { threshold: 0.5 }
-  //   );
-
-  //   const similarity = diffPixels / (canvasA.width * canvasA.height);
-  //   return similarity < 0.2; // you can adjust the threshold
-  // };
 
   const rectRef = useRef({
     x: 0,
@@ -514,6 +506,12 @@ const CameraCanvas = () => {
     setShowSuccessMessage(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.reload();
+  };
+
   return (
     <div>
       <div className={styless.dashboardHeader}>
@@ -525,7 +523,7 @@ const CameraCanvas = () => {
         <div className={styless.dropdownContainer} ref={menuRef}>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={styles.dropdownToggle}
+            className={styless.dropdownToggle}
             aria-expanded={isMenuOpen ? "true" : "false"}
             aria-haspopup="true"
           >
@@ -563,6 +561,15 @@ const CameraCanvas = () => {
                 className={styless.dropdownItem}
               >
                 Dashboard
+              </button>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className={styless.dropdownItem}
+              >
+                Logout
               </button>
             </div>
           )}
@@ -724,4 +731,5 @@ const styles = {
     margin: "0 auto",
   },
 };
+
 export default CameraCanvas;
