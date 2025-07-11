@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./FileListComponent.module.css";
 import * as XLSX from "xlsx";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import KTPPDF from "./KTPPDF"; // pastikan path sesuai
 
 const FileListComponent = ({ files }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -224,6 +226,35 @@ const FileListComponent = ({ files }) => {
             )}
 
             <h3>🪪 Detail Data Anggota</h3>
+            <PDFDownloadLink
+              document={
+                <KTPPDF
+                  data={{
+                    ...selectedFile,
+                    data:
+                      selectedFile.data?.startsWith("/") ||
+                      selectedFile.data?.length < 50
+                        ? null // invalid base64
+                        : selectedFile.data.replace(/\s/g, ""),
+                    fallbackImage: selectedFile.foto_url, // digunakan kalau data base64 gagal
+                  }}
+                />
+              }
+              fileName={`KTP_${selectedFile.nik}.pdf`}
+              style={{
+                textDecoration: "none",
+                padding: "8px 16px",
+                color: "#fff",
+                backgroundColor: "#10b981",
+                borderRadius: "6px",
+                display: "inline-block",
+                margin: "1rem 0",
+              }}
+            >
+              {({ loading }) =>
+                loading ? "Menyiapkan PDF..." : "⬇️ Unduh PDF"
+              }
+            </PDFDownloadLink>
             <table className={styles.detailTable}>
               <tbody>
                 <tr>
