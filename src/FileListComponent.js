@@ -10,6 +10,7 @@ const FileListComponent = ({ files }) => {
 
   const formatPhoneNumber = (phone) =>
     phone?.replace(/(\d{4})(\d{4})(\d{4})/, "$1-$2-$3");
+
   const handleRowClick = async (file) => {
     const token = localStorage.getItem("token");
 
@@ -17,6 +18,7 @@ const FileListComponent = ({ files }) => {
       alert("Token tidak ditemukan. Silakan login kembali.");
       return;
     }
+    document.body.style.overflow = "hidden";
 
     try {
       const response = await fetch(
@@ -70,7 +72,9 @@ const FileListComponent = ({ files }) => {
 
   const closeModal = () => {
     setSelectedFile(null);
+    document.body.style.overflow = "";
   };
+
   const exportToExcel = (data) => {
     const domain = window.location.origin;
 
@@ -209,8 +213,23 @@ const FileListComponent = ({ files }) => {
             className={styles.modalContent}
             onClick={(e) => e.stopPropagation()}
           >
+            <div className={styles.ktaWrapper}>
+              <div className={styles.ktaContainer}>
+                <img
+                  src={"/background-kta.jpg"}
+                  alt="KTA"
+                  className={styles.ktaImage}
+                />
+                <h2 className={`${styles.h2Text} ${styles.nama}`}>
+                  {selectedFile.nama_lengkap}
+                </h2>
+                <h2 className={`${styles.h2Text} ${styles.nik}`}>
+                  {selectedFile.nik}
+                </h2>
+              </div>
+            </div>
             {/* Foto KTP */}
-            {selectedFile.data && (
+            {/* {selectedFile.data && (
               <img
                 src={`data:image/jpeg;base64,${selectedFile.data}`}
                 alt={`Foto KTP - ${selectedFile.nik}`}
@@ -223,9 +242,21 @@ const FileListComponent = ({ files }) => {
                   boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
                 }}
               />
-            )}
+            )} */}
+            <div
+              style={{
+                textDecoration: "none",
+                padding: "8px 16px",
+                color: "#fff",
+                backgroundColor: "#10b981",
+                borderRadius: "6px",
+                display: "inline-block",
+                margin: "1rem 1rem",
+              }}
+            >
+              ⬇️ Unduh KTA
+            </div>
 
-            <h3>🪪 Detail Data Anggota</h3>
             <PDFDownloadLink
               document={
                 <KTPPDF
@@ -248,13 +279,14 @@ const FileListComponent = ({ files }) => {
                 backgroundColor: "#10b981",
                 borderRadius: "6px",
                 display: "inline-block",
-                margin: "1rem 0",
+                margin: "1rem 1rem",
               }}
             >
               {({ loading }) =>
                 loading ? "Menyiapkan PDF..." : "⬇️ Unduh PDF"
               }
             </PDFDownloadLink>
+            <h3>🪪 Detail Data Anggota</h3>
             <table className={styles.detailTable}>
               <tbody>
                 <tr>
