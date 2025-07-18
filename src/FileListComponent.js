@@ -3,10 +3,25 @@ import styles from "./FileListComponent.module.css";
 import * as XLSX from "xlsx";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import KTPPDF from "./KTPPDF"; // pastikan path sesuai
+import html2canvas from "html2canvas";
 
 const FileListComponent = ({ files }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+  const handleDownloadImage = () => {
+    const element = document.getElementById("kta-to-download");
+    if (!element) return;
+
+    html2canvas(element, {
+      useCORS: true,
+      scale: 2,
+    }).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = `KTA_${selectedFile.nik}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  };
 
   const formatPhoneNumber = (phone) =>
     phone?.replace(/(\d{4})(\d{4})(\d{4})/, "$1-$2-$3");
@@ -214,7 +229,7 @@ const FileListComponent = ({ files }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.ktaWrapper}>
-              <div className={styles.ktaContainer}>
+              <div className={styles.ktaContainer} id="kta-to-download">
                 <img
                   src={"/background-kta.jpg"}
                   alt="KTA"
@@ -244,6 +259,7 @@ const FileListComponent = ({ files }) => {
               />
             )} */}
             <div
+              onClick={handleDownloadImage}
               style={{
                 textDecoration: "none",
                 padding: "8px 16px",
@@ -252,6 +268,7 @@ const FileListComponent = ({ files }) => {
                 borderRadius: "6px",
                 display: "inline-block",
                 margin: "1rem 1rem",
+                cursor: "pointer",
               }}
             >
               ⬇️ Unduh KTA
